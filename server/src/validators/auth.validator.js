@@ -13,3 +13,8 @@ export const registerSchema = z.object({
     .regex(/[A-Za-z]/, "Password must contain a letter")
     .regex(/\d/, "Password must contain a number"),
 });
+
+export const loginSchema = z.object({
+  email: z.string().trim().toLowerCase().email("Enter a valid email"),
+  password: z.string().min(1, "Password is required"),
+});
