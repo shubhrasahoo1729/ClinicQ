@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
+import clinicRoutes from "./routes/clinicRoutes.js";
+import doctorRoutes from "./routes/doctorRoutes.js";
+import staffRoutes from "./routes/staffRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
@@ -13,6 +16,9 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/clinics", clinicRoutes);
+app.use("/api/doctors", doctorRoutes);
+app.use("/api/staff", staffRoutes);
 
 app.use((req, res) => {
   res
@@ -20,6 +26,6 @@ app.use((req, res) => {
     .json({ message: `Route not found: ${req.method} ${req.originalUrl}` });
 });
 
-app.use(errorHandler); // still LAST
+app.use(errorHandler); // must stay LAST
 
 export default app;
