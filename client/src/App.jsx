@@ -1,22 +1,58 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Placeholder from "./pages/Placeholder";
+import { roleHome } from "./utils/roleHome";
 
-function App() {
-  const [message, setMessage] = useState("Checking server...");
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/health")
-      .then((res) => setMessage(res.data.message))
-      .catch(() => setMessage("Could not reach the server"));
-  }, []);
-
-  return (
-    <div style={{ padding: 24 }}>
-      <h1>ClinicQ</h1>
-      <p>{message}</p>
-    </div>
-  );
+function Home() {
+  const { user, loading } = useAuth();
+  if (loading) return <p className="p-6">Loading...</p>;
+  return <Navigate to={user ? roleHome[user.role] : "/login"} replace />;
 }
 
-export default App;
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
+      <Route
+        path="/patient"
+        element={
+          <ProtectedRoute roles={["patient"]}>
+            <Placeholder title="Patient dashboard" />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/reception"
+        element={
+          <ProtectedRoute roles={["receptionist"]}>
+            <Placeholder title="Reception dashboard" />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/doctor"
+        element={
+          <ProtectedRoute roles={["doctor"]}>
+            <Placeholder title="Doctor dashboard" />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute roles={["admin"]}>
+            <Placeholder title="Admin dashboard" />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route path="*" element={<p className="p-6">Page not found</p>} />
+    </Routes>
+  );
+}
