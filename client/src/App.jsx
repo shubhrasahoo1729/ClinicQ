@@ -4,6 +4,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Placeholder from "./pages/Placeholder";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 import { roleHome } from "./utils/roleHome";
 
 function Home() {
@@ -47,7 +48,7 @@ export default function App() {
         path="/admin"
         element={
           <ProtectedRoute roles={["admin"]}>
-            <Placeholder title="Admin dashboard" />
+            <AdminDashboard />
           </ProtectedRoute>
         }
       />
