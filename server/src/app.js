@@ -5,6 +5,7 @@ import clinicRoutes from "./routes/clinicRoutes.js";
 import doctorRoutes from "./routes/doctorRoutes.js";
 import staffRoutes from "./routes/staffRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import queueRoutes from "./routes/queueRoutes.js";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/clinics", clinicRoutes);
 app.use("/api/doctors", doctorRoutes);
 app.use("/api/staff", staffRoutes);
+app.use("/api/queue", queueRoutes);
 
 app.use((req, res) => {
   res

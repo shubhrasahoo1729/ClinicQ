@@ -33,3 +33,9 @@ export const createDoctorSchema = z
   });
 
 export const updateDoctorSchema = z.object(profileFields).partial();
+
+export const queueStatusSchema = z.object({
+  status: z.enum(["open", "paused", "closed"], {
+    message: "Status must be open, paused or closed",
+  }),
+});

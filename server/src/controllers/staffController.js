@@ -36,3 +36,15 @@ export async function createReceptionist(req, res) {
     },
   });
 }
+
+export async function listReceptionists(req, res) {
+  const filter = { role: "receptionist" };
+  if (req.query.clinic) filter.clinic = req.query.clinic;
+
+  const staff = await User.find(filter)
+    .select("-passwordHash")
+    .populate("clinic", "name")
+    .sort({ createdAt: -1 });
+
+  res.json({ staff });
+}

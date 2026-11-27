@@ -70,3 +70,25 @@ export async function updateDoctor(req, res) {
   await doctor.populate("user", "name email phone");
   res.json({ message: "Doctor updated", doctor });
 }
+
+export async function setQueueStatus(req, res) {
+  const doctor = await Doctor.findById(req.params.id);
+  if (!doctor) {
+    return res.status(404).json({ message: "Doctor not found" });
+  }
+
+  // A doctor may only control their own queue
+  if (String(doctor.user) !== String(req.user._id)) {
+    return res
+      .status(403)
+      .json({ message: "You can only change your own queue" });
+  }
+
+  doctor.queueStatus = req.body.status;
+  await doctor.save();
+
+  res.json({
+    message: `Queue is now ${doctor.queueStatus}`,
+    queueStatus: doctor.queueStatus,
+  });
+}
